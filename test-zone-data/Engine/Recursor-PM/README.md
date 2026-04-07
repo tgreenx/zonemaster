@@ -16,10 +16,12 @@ CNAME function in [Recursor.pm].
 * LOOPED-CNAME-IN-ZONE-3
 * LOOPED-CNAME-OUT-OF-ZONE
 * TOO-LONG-CNAME-CHAIN
+* TOO-MANY-CNAME
 * TARGET-NO-MATCH-CNAME
 * BROKEN-CNAME-CHAIN
 * WRONG-CNAME-OWNER-NAME
 * EXTRA-CNAME-IN-ANSWER
+* UNRESOLVABLE-CNAME
 
 See [CNAME.md] for specification of the scenarios.
 
@@ -519,13 +521,44 @@ sub3.cname.recursor.engine.xa. 3600 IN	NS	ns1.sub3.cname.recursor.engine.xa.
 ```
 --> OK
 
+Scenario name                | Expected output
+:----------------------------|:---------------------------------------------------------------------------------------------
+TOO-LONG-CNAME-CHAIN         | Undefined and tag `CNAME_CHAIN_TOO_LONG`
 
+```
+; <<>> DiG 9.18.33-1~deb12u2-Debian <<>> A @127.30.1.31 too-long-cname-chain.sub2.cname.recursor.engine.xa
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 13393
+;; flags: qr rd; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 3
+;; WARNING: recursion requested but not available
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: aec9669fb1897aae (echoed)
+;; QUESTION SECTION:
+;too-long-cname-chain.sub2.cname.recursor.engine.xa. IN A
+
+;; AUTHORITY SECTION:
+sub2.cname.recursor.engine.xa. 3600 IN  NS      ns1.sub2.cname.recursor.engine.xa.
+
+;; ADDITIONAL SECTION:
+ns1.sub2.cname.recursor.engine.xa. 3600 IN A    127.30.1.32
+ns1.sub2.cname.recursor.engine.xa. 3600 IN AAAA fda1:b2:c3:0:127:30:1:32
+
+;; Query time: 3 msec
+;; SERVER: 127.30.1.31#53(127.30.1.31) (UDP)
+;; WHEN: Tue Apr 07 10:59:15 CEST 2026
+;; MSG SIZE  rcvd: 27
+```
+--> OK
 
 Scenario name                | Expected output
 :----------------------------|:---------------------------------------------------------------------------------------------
-TOO-LONG-CNAME-CHAIN         | ??
+TOO-MANY-CNAME               | Undefined and tag `CNAME_RECORDS_TOO_MANY`
 ```
-; <<>> DiG 9.18.18-0ubuntu0.22.04.1-Ubuntu <<>> @127.30.1.31 too-long-cname-chain.cname.recursor.engine.xa
+; <<>> DiG 9.18.18-0ubuntu0.22.04.1-Ubuntu <<>> @127.30.1.31 too-many-cname.cname.recursor.engine.xa
 ; (1 server found)
 ;; global options: +cmd
 ;; Got answer:
@@ -537,20 +570,20 @@ TOO-LONG-CNAME-CHAIN         | ??
 ; EDNS: version: 0, flags:; udp: 1232
 ; COOKIE: 5b12662406062bc6 (echoed)
 ;; QUESTION SECTION:
-;too-long-cname-chain.cname.recursor.engine.xa. IN A
+;too-many-cname.cname.recursor.engine.xa. IN A
 
 ;; ANSWER SECTION:
-too-long-cname-chain.cname.recursor.engine.xa. 3600 IN CNAME too-long-cname-chain-two.cname.recursor.engine.xa.
-too-long-cname-chain-two.cname.recursor.engine.xa. 3600	IN CNAME too-long-cname-chain-three.cname.recursor.engine.xa.
-too-long-cname-chain-three.cname.recursor.engine.xa. 3600 IN CNAME too-long-cname-chain-four.cname.recursor.engine.xa.
-too-long-cname-chain-four.cname.recursor.engine.xa. 3600 IN CNAME too-long-cname-chain-five.cname.recursor.engine.xa.
-too-long-cname-chain-five.cname.recursor.engine.xa. 3600 IN CNAME too-long-cname-chain-six.cname.recursor.engine.xa.
-too-long-cname-chain-six.cname.recursor.engine.xa. 3600	IN CNAME too-long-cname-chain-seven.cname.recursor.engine.xa.
-too-long-cname-chain-seven.cname.recursor.engine.xa. 3600 IN CNAME too-long-cname-chain-eight.cname.recursor.engine.xa.
-too-long-cname-chain-eight.cname.recursor.engine.xa. 3600 IN CNAME too-long-cname-chain-nine.cname.recursor.engine.xa.
-too-long-cname-chain-nine.cname.recursor.engine.xa. 3600 IN CNAME too-long-cname-chain-ten.cname.recursor.engine.xa.
-too-long-cname-chain-ten.cname.recursor.engine.xa. 3600	IN CNAME too-long-cname-chain-target.cname.recursor.engine.xa.
-too-long-cname-chain-target.cname.recursor.engine.xa. 3600 IN A	127.0.0.1
+too-many-cname.cname.recursor.engine.xa. 3600 IN CNAME too-many-cname-two.cname.recursor.engine.xa.
+too-many-cname-two.cname.recursor.engine.xa. 3600	IN CNAME too-many-cname-three.cname.recursor.engine.xa.
+too-many-cname-three.cname.recursor.engine.xa. 3600 IN CNAME too-many-cname-four.cname.recursor.engine.xa.
+too-many-cname-four.cname.recursor.engine.xa. 3600 IN CNAME too-many-cname-five.cname.recursor.engine.xa.
+too-many-cname-five.cname.recursor.engine.xa. 3600 IN CNAME too-many-cname-six.cname.recursor.engine.xa.
+too-many-cname-six.cname.recursor.engine.xa. 3600	IN CNAME too-many-cname-seven.cname.recursor.engine.xa.
+too-many-cname-seven.cname.recursor.engine.xa. 3600 IN CNAME too-many-cname-eight.cname.recursor.engine.xa.
+too-many-cname-eight.cname.recursor.engine.xa. 3600 IN CNAME too-many-cname-nine.cname.recursor.engine.xa.
+too-many-cname-nine.cname.recursor.engine.xa. 3600 IN CNAME too-many-cname-ten.cname.recursor.engine.xa.
+too-many-cname-ten.cname.recursor.engine.xa. 3600	IN CNAME too-many-cname-target.cname.recursor.engine.xa.
+too-many-cname-target.cname.recursor.engine.xa. 3600 IN A	127.0.0.1
 
 ;; AUTHORITY SECTION:
 cname.recursor.engine.xa. 3600	IN	NS	ns1.cname.recursor.engine.xa.
@@ -689,7 +722,10 @@ cname.recursor.engine.xa. 3600	IN	NS	ns1.cname.recursor.engine.xa.
 ;; MSG SIZE  rcvd: 341
 ```
 
-
+Scenario name                | Expected output
+:----------------------------|:---------------------------------------------------------------------------------------------
+UNRESOLVABLE-CNAME           | ??
+--> Untested
 
 
 [CNAME.md]:                            ../../../docs/public/specifications/test-zones/Engine/Recursor-PM/CNAME.md

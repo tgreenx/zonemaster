@@ -43,11 +43,13 @@ LOOPED-CNAME-IN-ZONE-1       | Undefined and tags `CNAME_START`, `CNAME_LOOP_INN
 LOOPED-CNAME-IN-ZONE-2       | Undefined and tags `CNAME_START`, `CNAME_LOOP_INNER`
 LOOPED-CNAME-IN-ZONE-3       | Undefined and tags `CNAME_START`, `CNAME_LOOP_INNER`
 LOOPED-CNAME-OUT-OF-ZONE     | Undefined and tags `CNAME_START`, `CNAME_LOOP_OUTER`
-TOO-LONG-CNAME-CHAIN         | Undefined and tags `CNAME_START`, `CNAME_RECORDS_TOO_MANY`
+TOO-LONG-CNAME-CHAIN         | Undefined and tags `CNAME_START`, `CNAME_CHAIN_TOO_LONG`
+TOO-MANY-CNAME               | Undefined and tags `CNAME_START`, `CNAME_RECORDS_TOO_MANY`
 TARGET-NO-MATCH-CNAME        | Undefined and tags `CNAME_START`, `CNAME_NO_MATCH`
 BROKEN-CNAME-CHAIN           | Undefined and tags `CNAME_START`, `CNAME_RECORDS_CHAIN_BROKEN`
 WRONG-CNAME-OWNER-NAME       | False and no tags
 EXTRA-CNAME-IN-ANSWER        | False and no tags
+UNRESOLVABLE-CNAME           | Undefined and tags `CNAME_START`, `CNAME_UNRESOLVABLE`
 
 ## Zone setup for test scenarios
 
@@ -249,23 +251,29 @@ and the target name of the second CNAME record will point at the first.
 ```
 
 ### TOO-LONG-CNAME-CHAIN
+The query name will follow a CNAME chain and reach the maximum lookup limit
+in different, unique zones.
+
+* Query name: "too-long-cname-chain.sub2.cname.recursor.engine.xa"
+
+### TOO-MANY-CNAME
 The query name will resolve to one `A` record via ten CNAME records which is
 above the limit.
 
-* Query name: "too-long-cname-chain.cname.recursor.engine.xa"
+* Query name: "too-many-cname.cname.recursor.engine.xa"
   * To be found in the answer section:
 ```
-   too-long-cname-chain              CNAME too-long-cname-chain-two
-   too-long-cname-chain-two          CNAME too-long-cname-chain-three
-   too-long-cname-chain-three        CNAME too-long-cname-chain-four
-   too-long-cname-chain-four         CNAME too-long-cname-chain-five
-   too-long-cname-chain-five         CNAME too-long-cname-chain-six
-   too-long-cname-chain-six          CNAME too-long-cname-chain-seven
-   too-long-cname-chain-seven        CNAME too-long-cname-chain-eight
-   too-long-cname-chain-eight        CNAME too-long-cname-chain-nine
-   too-long-cname-chain-nine         CNAME too-long-cname-chain-ten
-   too-long-cname-chain-ten          CNAME too-long-cname-chain-target
-   too-long-cname-chain-target       A     127.0.0.1
+   too-many-cname              CNAME too-many-cname-two
+   too-many-cname-two          CNAME too-many-cname-three
+   too-many-cname-three        CNAME too-many-cname-four
+   too-many-cname-four         CNAME too-many-cname-five
+   too-many-cname-five         CNAME too-many-cname-six
+   too-many-cname-six          CNAME too-many-cname-seven
+   too-many-cname-seven        CNAME too-many-cname-eight
+   too-many-cname-eight        CNAME too-many-cname-nine
+   too-many-cname-nine         CNAME too-many-cname-ten
+   too-many-cname-ten          CNAME too-many-cname-target
+   too-many-cname-target       A     127.0.0.1
 ```
 
 ### TARGET-NO-MATCH-CNAME
@@ -312,6 +320,11 @@ besides the `A` record matching query name.
    extra-cname-in-answer-1       CNAME extra-cname-in-answer-2
 ```
 
+### UNRESOLVABLE-CNAME
+The target in the CNAME record can not be resolved because
+of an unidentified issue with the zone.
+
+* Query name: "unresolvable-cname.cname.recursor.engine.xa"
 
 
 [RCODE Name]:                                                     https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-6
