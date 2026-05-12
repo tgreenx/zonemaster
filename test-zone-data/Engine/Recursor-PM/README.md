@@ -724,9 +724,32 @@ cname.recursor.engine.xa. 3600	IN	NS	ns1.cname.recursor.engine.xa.
 
 Scenario name                | Expected output
 :----------------------------|:---------------------------------------------------------------------------------------------
-UNRESOLVABLE-CNAME           | ??
---> Untested
+UNRESOLVABLE-CNAME           | Undefined and tag `CNAME_UNRESOLVABLE`
+```
+; <<>> DiG 9.18.33-1~deb12u2-Debian <<>> A unresolvable-cname.cname.recursor.engine.xa @127.30.1.31
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 25446
+;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1
+;; WARNING: recursion requested but not available
 
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: cfd83b80ec1432a2 (echoed)
+;; QUESTION SECTION:
+;unresolvable-cname.cname.recursor.engine.xa. IN        A
+
+;; ANSWER SECTION:
+unresolvable-cname.cname.recursor.engine.xa. 3600 IN CNAME target.unresolvable-cname.cname.recursor.engine.xa.
+
+;; AUTHORITY SECTION:
+cname.recursor.engine.xa. 3600  IN      NS      ns1.cname.recursor.engine.xa.
+
+;; Query time: 0 msec
+;; SERVER: 127.30.1.31#53(127.30.1.31) (UDP)
+;; WHEN: Tue May 12 15:24:03 CEST 2026
+;; MSG SIZE  rcvd: 25
+```
 
 [CNAME.md]:                            ../../../docs/public/specifications/test-zones/Engine/Recursor-PM/CNAME.md
 [Recursor.pm]:                         https://github.com/zonemaster/zonemaster-engine/blob/master/lib/Zonemaster/Engine/Recursor.pm

@@ -322,9 +322,14 @@ besides the `A` record matching query name.
 
 ### UNRESOLVABLE-CNAME
 The target in the CNAME record can not be resolved because
-of an unidentified issue with the zone.
+of an issue with the zone.
 
 * Query name: "unresolvable-cname.cname.recursor.engine.xa"
+  * To be found in the answer section:
+```
+unresolvable-cname            CNAME target.unresolvable-cname
+*.target.unresolvable-cname   TXT   "Breaks"
+```
 
 
 [RCODE Name]:                                                     https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-6
