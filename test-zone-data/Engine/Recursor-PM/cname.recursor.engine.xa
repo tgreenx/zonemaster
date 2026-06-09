@@ -148,6 +148,12 @@ extra-cname-in-answer         A     127.0.0.1
 extra-cname-in-answer-1       CNAME extra-cname-in-answer-2
 
 
+; For scenario CNAME-CHAIN-TO-NODATA
+cname-chain-to-nodata            CNAME target.cname-chain-to-nodata
+target.cname-chain-to-nodata     TXT   "NODATA response"
+
+
 ; For scenario UNRESOLVABLE-CNAME
-unresolvable-cname            CNAME target.unresolvable-cname
-*.target.unresolvable-cname   TXT   "Breaks"
+unresolvable-cname           CNAME target.unresolvable-cname
+target.unresolvable-cname    TXT   "Unresolvable"
+

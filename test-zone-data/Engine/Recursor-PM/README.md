@@ -724,18 +724,47 @@ cname.recursor.engine.xa. 3600	IN	NS	ns1.cname.recursor.engine.xa.
 
 Scenario name                | Expected output
 :----------------------------|:---------------------------------------------------------------------------------------------
-UNRESOLVABLE-CNAME           | Undefined and tag `CNAME_UNRESOLVABLE`
+CNAME-CHAIN-TO-NODATA              | True and tag `CNAME_TO_NODATA`
 ```
-; <<>> DiG 9.18.33-1~deb12u2-Debian <<>> A unresolvable-cname.cname.recursor.engine.xa @127.30.1.31
+; <<>> DiG 9.18.33-1~deb12u2-Debian <<>> cname-chain-to-nodata.cname.recursor.engine.xa @127.30.1.31
 ;; global options: +cmd
 ;; Got answer:
-;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 25446
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 63670
 ;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1
 ;; WARNING: recursion requested but not available
 
 ;; OPT PSEUDOSECTION:
 ; EDNS: version: 0, flags:; udp: 1232
-; COOKIE: cfd83b80ec1432a2 (echoed)
+; COOKIE: c687f14b61093ebf (echoed)
+;; QUESTION SECTION:
+;cname-chain-to-nodata.cname.recursor.engine.xa.        IN A
+
+;; ANSWER SECTION:
+cname-chain-to-nodata.cname.recursor.engine.xa. 3600 IN CNAME target.cname-chain-to-nodata.cname.recursor.engine.xa.
+
+;; AUTHORITY SECTION:
+cname.recursor.engine.xa. 3600  IN      NS      ns1.cname.recursor.engine.xa.
+
+;; Query time: 0 msec
+;; SERVER: 127.30.1.31#53(127.30.1.31) (UDP)
+;; WHEN: Tue Jun 09 17:18:47 CEST 2026
+;; MSG SIZE  rcvd: 266
+```
+
+Scenario name                | Expected output
+:----------------------------|:---------------------------------------------------------------------------------------------
+UNRESOLVABLE-CNAME           | Undefined and tag `CNAME_UNRESOLVABLE`
+```
+; <<>> DiG 9.18.33-1~deb12u2-Debian <<>> unresolvable-cname.cname.recursor.engine.xa @127.30.1.31
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 16583
+;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1
+;; WARNING: recursion requested but not available
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 7a75cf7418f8cfa6 (echoed)
 ;; QUESTION SECTION:
 ;unresolvable-cname.cname.recursor.engine.xa. IN        A
 
@@ -745,10 +774,29 @@ unresolvable-cname.cname.recursor.engine.xa. 3600 IN CNAME target.unresolvable-c
 ;; AUTHORITY SECTION:
 cname.recursor.engine.xa. 3600  IN      NS      ns1.cname.recursor.engine.xa.
 
+;; Query time: 3 msec
+;; SERVER: 127.30.1.31#53(127.30.1.31) (UDP)
+;; WHEN: Tue Jun 09 17:19:08 CEST 2026
+;; MSG SIZE  rcvd: 257
+```
+```
+; <<>> DiG 9.18.33-1~deb12u2-Debian <<>> target.unresolvable-cname.cname.recursor.engine.xa @127.30.1.31
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: FORMERR, id: 11669
+;; flags: qr aa rd; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1
+;; WARNING: recursion requested but not available
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 5d15536cbcfaab20 (echoed)
+;; QUESTION SECTION:
+;target.unresolvable-cname.cname.recursor.engine.xa. IN A
+
 ;; Query time: 0 msec
 ;; SERVER: 127.30.1.31#53(127.30.1.31) (UDP)
-;; WHEN: Tue May 12 15:24:03 CEST 2026
-;; MSG SIZE  rcvd: 25
+;; WHEN: Tue Jun 09 17:22:29 CEST 2026
+;; MSG SIZE  rcvd: 9
 ```
 
 [CNAME.md]:                            ../../../docs/public/specifications/test-zones/Engine/Recursor-PM/CNAME.md

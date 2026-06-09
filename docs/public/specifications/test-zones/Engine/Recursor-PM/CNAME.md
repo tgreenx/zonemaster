@@ -320,17 +320,30 @@ besides the `A` record matching query name.
    extra-cname-in-answer-1       CNAME extra-cname-in-answer-2
 ```
 
+### CNAME-CHAIN-TO-NODATA
+There is a NODATA response for an in-bailiwick CNAME target name.
+
+* Query name: "unresolvable-cname.cname.recursor.engine.xa"
+  * To be found in the answer section:
+```
+cname-chain-to-nodata            CNAME target.cname-chain-to-nodata
+```
+  * The CNAME target "target.cname-chain-to-nodata..cname.recursor.engine.xa"
+    gives a NODATA response
+
 ### UNRESOLVABLE-CNAME
 The target in the CNAME record can not be resolved because
 of an issue with the zone.
+Currently this scenario considers a FORMERR response to an
+in-bailiwick CNAME target name.
 
 * Query name: "unresolvable-cname.cname.recursor.engine.xa"
   * To be found in the answer section:
 ```
 unresolvable-cname            CNAME target.unresolvable-cname
-*.target.unresolvable-cname   TXT   "Breaks"
 ```
-
+  * The CNAME target "target.unresolvable-cname.cname.recursor.engine.xa"
+    gives a FORMERR response
 
 [RCODE Name]:                                                     https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml#dns-parameters-6
 [Test zone README file]:                                          ../../README.md
