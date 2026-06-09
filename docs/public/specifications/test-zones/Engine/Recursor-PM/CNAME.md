@@ -63,6 +63,7 @@ specific scenario:
 * In the zone, the query name always has a `CNAME` record.
 * The zone is set up on one NS, ns1.
 * The [RCODE Name] in the response is NoError.
+* The maximum lookup limit is set to 10.
 
 ### GOOD-CNAME-1
 The query name will resolve to one `A` record via one CNAME.
