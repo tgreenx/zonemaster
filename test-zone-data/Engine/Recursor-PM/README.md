@@ -598,70 +598,72 @@ cname.recursor.engine.xa. 3600	IN	NS	ns1.cname.recursor.engine.xa.
 
 Scenario name                | Expected output
 :----------------------------|:---------------------------------------------------------------------------------------------
-TARGET-NO-MATCH-CNAME        | ??
+TARGET-NO-MATCH-CNAME        | Undefined and tags `CNAME_START`, `CNAME_NO_MATCH`
 ```
-; <<>> DiG 9.18.18-0ubuntu0.22.04.1-Ubuntu <<>> @127.30.1.31 target-no-match-cname.cname.recursor.engine.xa
+; <<>> DiG 9.18.33-1~deb12u2-Debian <<>> @127.30.1.31 target-no-match-cname.cname.recursor.engine.xa
 ; (1 server found)
 ;; global options: +cmd
 ;; Got answer:
-;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 51040
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 22052
 ;; flags: qr aa rd; QUERY: 1, ANSWER: 2, AUTHORITY: 1, ADDITIONAL: 1
 ;; WARNING: recursion requested but not available
 
 ;; OPT PSEUDOSECTION:
 ; EDNS: version: 0, flags:; udp: 1232
-; COOKIE: 51f0cfb680ea5015 (echoed)
+; COOKIE: 117ae2814d65858a (echoed)
 ;; QUESTION SECTION:
-;target-no-match-cname.cname.recursor.engine.xa.	IN A
+;target-no-match-cname.cname.recursor.engine.xa.        IN A
 
 ;; ANSWER SECTION:
-target-no-match-cname.cname.recursor.engine.xa.	3600 IN	CNAME target-no-match-cname-two.cname.recursor.engine.xa.
-target-no-match-cname-target.cname.recursor.engine.xa. 3600 IN A 127.0.0.1
+TARGET-no-match-cname.cname.recursor.engine.xa. 3600 IN CNAME target-NO-match-cname-two.cname.recursor.engine.xa.
+target-no-MATCH-cname-target.cname.recursor.engine.xa. 3600 IN A 127.0.0.1
 
 ;; AUTHORITY SECTION:
-cname.recursor.engine.xa. 3600	IN	NS	ns1.cname.recursor.engine.xa.
+cname.recursor.engine.xa. 3600  IN      NS      ns1.cname.recursor.engine.xa.
 
 ;; Query time: 0 msec
 ;; SERVER: 127.30.1.31#53(127.30.1.31) (UDP)
-;; WHEN: Thu Nov 30 16:40:31 UTC 2023
-;; MSG SIZE  rcvd: 332
+;; WHEN: Tue Sep 01 18:52:24 CEST 2026
+;; MSG SIZE  rcvd: 33
 ```
 --> OK
 
 Scenario name                | Expected output
 :----------------------------|:---------------------------------------------------------------------------------------------
-BROKEN-CNAME-CHAIN           | ??
+BROKEN-CNAME-CHAIN           | Undefined and tags `CNAME_START`, `CNAME_RECORDS_CHAIN_BROKEN`
 ```
-; <<>> DiG 9.18.18-0ubuntu0.22.04.1-Ubuntu <<>> @127.30.1.31 target-no-match-cname.cname.recursor.engine.xa
+; <<>> DiG 9.18.33-1~deb12u2-Debian <<>> @127.30.1.31 broken-cname-chain.cname.recursor.engine.xa
 ; (1 server found)
 ;; global options: +cmd
 ;; Got answer:
-;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 51040
-;; flags: qr aa rd; QUERY: 1, ANSWER: 2, AUTHORITY: 1, ADDITIONAL: 1
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 9666
+;; flags: qr aa rd; QUERY: 1, ANSWER: 3, AUTHORITY: 1, ADDITIONAL: 1
 ;; WARNING: recursion requested but not available
 
 ;; OPT PSEUDOSECTION:
 ; EDNS: version: 0, flags:; udp: 1232
-; COOKIE: 51f0cfb680ea5015 (echoed)
+; COOKIE: a0c57dba78ac60f0 (echoed)
 ;; QUESTION SECTION:
-;target-no-match-cname.cname.recursor.engine.xa.	IN A
+;broken-cname-chain.cname.recursor.engine.xa. IN        A
 
 ;; ANSWER SECTION:
-target-no-match-cname.cname.recursor.engine.xa.	3600 IN	CNAME target-no-match-cname-two.cname.recursor.engine.xa.
-target-no-match-cname-target.cname.recursor.engine.xa. 3600 IN A 127.0.0.1
+broken-cname-chain.cname.recursor.engine.xa. 3600 IN CNAME broken-cname-chain-two.cname.recursor.engine.xa.
+broken-cname-chain-three.cname.recursor.engine.xa. 3600 IN CNAME broken-cname-chain-target.cname.recursor.engine.xa.
+broken-cname-chain-target.cname.recursor.engine.xa. 3600 IN A 127.0.0.1
 
 ;; AUTHORITY SECTION:
-cname.recursor.engine.xa. 3600	IN	NS	ns1.cname.recursor.engine.xa.
+cname.recursor.engine.xa. 3600  IN      NS      ns1.cname.recursor.engine.xa.
 
 ;; Query time: 0 msec
 ;; SERVER: 127.30.1.31#53(127.30.1.31) (UDP)
-;; WHEN: Thu Nov 30 16:40:31 UTC 2023
-;; MSG SIZE  rcvd: 332
+;; WHEN: Tue Sep 01 18:51:42 CEST 2026
+;; MSG SIZE  rcvd: 43
 ```
+--> OK
 
 Scenario name                | Expected output
 :----------------------------|:---------------------------------------------------------------------------------------------
-WRONG-CNAME-OWNER-NAME       | ??
+WRONG-CNAME-OWNER-NAME       | True and no tags
 ```
 ; <<>> DiG 9.18.18-0ubuntu0.22.04.1-Ubuntu <<>> @127.30.1.31 wrong-cname-owner-name.cname.recursor.engine.xa
 ; (1 server found)
@@ -693,38 +695,39 @@ cname.recursor.engine.xa. 3600	IN	NS	ns1.cname.recursor.engine.xa.
 
 Scenario name                | Expected output
 :----------------------------|:---------------------------------------------------------------------------------------------
-EXTRA-CNAME-IN-ANSWER        | ??
+EXTRA-CNAME-IN-ANSWER        | True and no tags
 ```
-; <<>> DiG 9.18.18-0ubuntu0.22.04.1-Ubuntu <<>> @127.30.1.31 wrong-cname-owner-name.cname.recursor.engine.xa
+; <<>> DiG 9.18.33-1~deb12u2-Debian <<>> @127.30.1.31 extra-cname-in-answer.cname.recursor.engine.xa
 ; (1 server found)
 ;; global options: +cmd
 ;; Got answer:
-;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 18339
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 43314
 ;; flags: qr aa rd; QUERY: 1, ANSWER: 2, AUTHORITY: 1, ADDITIONAL: 1
 ;; WARNING: recursion requested but not available
 
 ;; OPT PSEUDOSECTION:
 ; EDNS: version: 0, flags:; udp: 1232
-; COOKIE: f300bad89af70d8b (echoed)
+; COOKIE: 3225679dbd4a891e (echoed)
 ;; QUESTION SECTION:
-;wrong-cname-owner-name.cname.recursor.engine.xa. IN A
+;extra-cname-in-answer.cname.recursor.engine.xa.        IN A
 
 ;; ANSWER SECTION:
-wrong-cname-owner-name-1.cname.recursor.engine.xa. 3600	IN CNAME wrong-cname-owner-name-target.cname.recursor.engine.xa.
-wrong-cname-owner-name-target.cname.recursor.engine.xa.	3600 IN	A 127.0.0.1
+extra-cname-in-answer.cname.recursor.engine.xa. 3600 IN A 127.0.0.1
+extra-cname-in-answer-1.cname.recursor.engine.xa. 3600 IN CNAME extra-cname-in-answer-2.cname.recursor.engine.xa.
 
 ;; AUTHORITY SECTION:
-cname.recursor.engine.xa. 3600	IN	NS	ns1.cname.recursor.engine.xa.
+cname.recursor.engine.xa. 3600  IN      NS      ns1.cname.recursor.engine.xa.
 
 ;; Query time: 0 msec
 ;; SERVER: 127.30.1.31#53(127.30.1.31) (UDP)
-;; WHEN: Fri Dec 01 11:07:20 UTC 2023
-;; MSG SIZE  rcvd: 341
+;; WHEN: Tue Sep 01 18:55:28 CEST 2026
+;; MSG SIZE  rcvd: 32
 ```
+--> OK
 
 Scenario name                | Expected output
 :----------------------------|:---------------------------------------------------------------------------------------------
-CNAME-CHAIN-TO-NODATA              | True and tag `CNAME_TO_NODATA`
+CNAME-CHAIN-TO-NODATA        | True and tag `CNAME_TO_NODATA`
 ```
 ; <<>> DiG 9.18.33-1~deb12u2-Debian <<>> cname-chain-to-nodata.cname.recursor.engine.xa @127.30.1.31
 ;; global options: +cmd
@@ -750,6 +753,7 @@ cname.recursor.engine.xa. 3600  IN      NS      ns1.cname.recursor.engine.xa.
 ;; WHEN: Tue Jun 09 17:18:47 CEST 2026
 ;; MSG SIZE  rcvd: 266
 ```
+--> OK
 
 Scenario name                | Expected output
 :----------------------------|:---------------------------------------------------------------------------------------------
@@ -798,6 +802,7 @@ cname.recursor.engine.xa. 3600  IN      NS      ns1.cname.recursor.engine.xa.
 ;; WHEN: Tue Jun 09 17:22:29 CEST 2026
 ;; MSG SIZE  rcvd: 9
 ```
+--> OK
 
 [CNAME.md]:                            ../../../docs/public/specifications/test-zones/Engine/Recursor-PM/CNAME.md
 [Recursor.pm]:                         https://github.com/zonemaster/zonemaster-engine/blob/master/lib/Zonemaster/Engine/Recursor.pm

@@ -47,8 +47,9 @@ TOO-LONG-CNAME-CHAIN         | Undefined and tags `CNAME_START`, `CNAME_CHAIN_TO
 TOO-MANY-CNAME               | Undefined and tags `CNAME_START`, `CNAME_RECORDS_TOO_MANY`
 TARGET-NO-MATCH-CNAME        | Undefined and tags `CNAME_START`, `CNAME_NO_MATCH`
 BROKEN-CNAME-CHAIN           | Undefined and tags `CNAME_START`, `CNAME_RECORDS_CHAIN_BROKEN`
-WRONG-CNAME-OWNER-NAME       | False and no tags
-EXTRA-CNAME-IN-ANSWER        | False and no tags
+WRONG-CNAME-OWNER-NAME       | True and no tags
+EXTRA-CNAME-IN-ANSWER        | True and no tags
+CNAME-CHAIN-TO-NODATA        | True and tags `CNAME_START`, `CNAME_TO_NODATA`
 UNRESOLVABLE-CNAME           | Undefined and tags `CNAME_START`, `CNAME_UNRESOLVABLE`
 
 ## Zone setup for test scenarios
@@ -279,12 +280,14 @@ above the limit.
 
 ### TARGET-NO-MATCH-CNAME
 The CNAME target name does not match the owner name of the `A` record.
+Note that this scenario also purposefully use varying case in names for
+additionnal testing purposes, but it is not strictly needed.
 
 * Query name: "target-no-match-cname.cname.recursor.engine.xa"
   * To be found in the answer section:
 ```
-   target-no-match-cname         CNAME  target-no-match-cname-two
-   target-no-match-cname-target  A      127.0.0.1
+   TARGET-no-match-cname         CNAME  target-NO-match-cname-two
+   target-no-MATCH-cname-target  A      127.0.0.1
 ```
 
 ### BROKEN-CNAME-CHAIN
@@ -333,10 +336,12 @@ cname-chain-to-nodata            CNAME target.cname-chain-to-nodata
     gives a NODATA response
 
 ### UNRESOLVABLE-CNAME
-The target in the CNAME record can not be resolved because
-of an issue with the zone.
-Currently this scenario considers a FORMERR response to an
-in-bailiwick CNAME target name.
+The target in the CNAME record can not be resolved due to a resolution failure
+with the name servers of the zone.
+This scenario involves a FORMERR response to a query for the target of a CNAME
+resource record when the target is a subdomain of the resource record’s owner name.
+It purposefully considers a FORMERR response (as opposed to e.g. SERVFAIL) as this is
+required to trigger the behavior in Zonemaster's recursive lookup implementation.
 
 * Query name: "unresolvable-cname.cname.recursor.engine.xa"
   * To be found in the answer section:
